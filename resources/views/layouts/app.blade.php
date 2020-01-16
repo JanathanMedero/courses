@@ -64,6 +64,10 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('dashboard', Auth::user()->slug) }}">
+                                        Perfil
+                                    </a>
                                 </div>
                             </li>
                         @endguest

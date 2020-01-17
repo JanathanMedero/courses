@@ -3,9 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>
-		{{ Auth::user()->name }}
-	</title>
+	@yield('title')
 	<!-- Favicon -->
 	<link href="{{ asset('argon/img/brand/favicon.png') }}" rel="icon" type="image/png">
 	<!-- Fonts -->
@@ -15,6 +13,7 @@
 	<link href="{{ asset('argon/js/plugins/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
 	<!-- CSS Files -->
 	<link href="{{ asset('argon/css/argon-dashboard.css?v=1.1.1') }}" rel="stylesheet" />
+	@yield('extra-css')
 </head>
 
 <body>
@@ -34,35 +33,29 @@
 					<a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<div class="media align-items-center">
 							<span class="avatar avatar-sm rounded-circle">
-								<img alt="Image placeholder" src="{{ asset('argon/img/theme/team-1-800x800.jpg') }}">
+								<img alt="Image placeholder" src="{{ asset('images/'.Auth::user()->image) }}">
 							</span>
 						</div>
 					</a>
 					<div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
 						<div class=" dropdown-header noti-title">
-							<h6 class="text-overflow m-0">Welcome!</h6>
+							<h6 class="text-overflow m-0">Bienvenido!</h6>
 						</div>
-						<a href="./examples/profile.html" class="dropdown-item">
-							<i class="ni ni-single-02"></i>
-							<span>My profile</span>
-						</a>
 						<a href="./examples/profile.html" class="dropdown-item">
 							<i class="ni ni-settings-gear-65"></i>
 							<span>Settings</span>
 						</a>
-						<a href="./examples/profile.html" class="dropdown-item">
-							<i class="ni ni-calendar-grid-58"></i>
-							<span>Activity</span>
-						</a>
-						<a href="./examples/profile.html" class="dropdown-item">
-							<i class="ni ni-support-16"></i>
-							<span>Support</span>
-						</a>
 						<div class="dropdown-divider"></div>
-						<a href="#!" class="dropdown-item">
+						<a href="{{ route('logout') }}"
+						onclick="event.preventDefault();
+						document.getElementById('logout-form').submit();"
+						class="dropdown-item">
 							<i class="ni ni-user-run"></i>
-							<span>Logout</span>
+							<span>Cerrar sesión</span>
 						</a>
+						<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+						</form>
 					</div>
 				</li>
 			</ul>
@@ -102,6 +95,7 @@
 							<i class="fas fa-swatchbook text-primary"></i> Inicio
 						</a>
 					</li>
+					@hasanyrole('Admin|Moderator')
 					<li class="nav-item">
 					<a class="nav-link " href="{{ route('users.index') }}">
 							<i class="fas fa-users text-blue"></i> Usuarios
@@ -117,6 +111,14 @@
 							<i class="fas fa-book text-red"></i> Cursos
 						</a>
 					</li>
+					@endhasanyrole
+					@role('User')
+					<li class="nav-item">
+						<a class="nav-link  active " href="{{ route('courses.index') }}">
+							<i class="fas fa-book text-red"></i> Mis Cursos
+						</a>
+					</li>
+					@endrole
 				</ul>
 				<!-- Divider -->
 				<hr class="my-3">
@@ -153,7 +155,7 @@
 						<a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<div class="media align-items-center">
 								<span class="avatar avatar-sm rounded-circle">
-									<img alt="Image placeholder" src="{{ asset('argon/img/theme/team-4-800x800.jpg') }}">
+									<img alt="Image placeholder" src="{{ asset('images/'.Auth::user()->image) }}">
 								</span>
 								<div class="media-body ml-2 d-none d-lg-block">
 								<span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->name }}</span>
@@ -162,29 +164,23 @@
 						</a>
 						<div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
 							<div class=" dropdown-header noti-title">
-								<h6 class="text-overflow m-0">Welcome!</h6>
+								<h6 class="text-overflow m-0">Bienvenido!</h6>
 							</div>
-							<a href="../examples/profile.html" class="dropdown-item">
-								<i class="ni ni-single-02"></i>
-								<span>My profile</span>
-							</a>
 							<a href="../examples/profile.html" class="dropdown-item">
 								<i class="ni ni-settings-gear-65"></i>
 								<span>Settings</span>
 							</a>
-							<a href="../examples/profile.html" class="dropdown-item">
-								<i class="ni ni-calendar-grid-58"></i>
-								<span>Activity</span>
-							</a>
-							<a href="../examples/profile.html" class="dropdown-item">
-								<i class="ni ni-support-16"></i>
-								<span>Support</span>
-							</a>
 							<div class="dropdown-divider"></div>
-							<a href="#!" class="dropdown-item">
+							<a href="{{ route('logout') }}"
+							onclick="event.preventDefault();
+							document.getElementById('logout-form').submit();"
+							class="dropdown-item">
 								<i class="ni ni-user-run"></i>
-								<span>Logout</span>
+								<span>Cerrar sesión</span>
 							</a>
+							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+	                            @csrf
+							</form>
 						</div>
 					</li>
 				</ul>
@@ -193,7 +189,7 @@
 		</div>
 
 		<!-- Page content -->
-		<div class="container-fluid">
+		<div class="container-fluid" id="app">
 			<div class="row my-7">
 				@yield('content')
 			</div>
@@ -225,6 +221,7 @@
 		application: "argon-dashboard-free"
 	});
 </script>
+@yield('extra-js')
 </body>
 
 </html>
